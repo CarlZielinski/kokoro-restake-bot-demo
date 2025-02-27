@@ -11,7 +11,6 @@ This is a naive Node.js script that checks an EOA balance on Sepolia (or any EVM
 - [Prerequisites](#prerequisites)
 - [Project Structure](#project-structure)
 - [Installation](#installation)
-- [Configuration](#configuration)
 - [Running the Script](#running-the-script)
 - [How It Works](#how-it-works)
 - [Customization](#customization)
@@ -85,20 +84,18 @@ kokoro-restake-bot/
 
 Simply run:
 
-    ```
-    node restake.js
-    ```
+```node restake.js```
+ 
 
 You’ll see logs like:
 
-yaml
-Copy
-Edit
+```
 Naive multi-restake script started.
 EOA address: 0x123...
 Polling for >= 32 ETH every 60 seconds...
 EOA balance: 0.0 ETH
 Flow:
+```
 
 Every 60 seconds, the script checks the EOA’s current ETH balance.
 If the balance is >= 32:
@@ -111,14 +108,24 @@ Stop the script with Ctrl + C.
 
 ## How It Works
 Vault to EOA: Your on-chain Vault contract calls _restake() with 32 ETH chunks, sending them to your ephemeral EOA.
+
 restake.js: Sees the EOA’s new balance (≥ 32).
+
 P2P: The script calls P2P’s REST API to create a restaking request for exactly 1 validator (32 ETH).
+
 Deposit TX: It obtains a deposit transaction data (serializeTx, gasLimit, etc.) from the P2P API.
+
 Signing: Uses your ephemeral EOA’s private key to sign the transaction with ethers.js.
+
 Broadcast: Submits the signed transaction to the network. The node processes it, creating a new staked validator.
+
 Multiple 32: If your EOA had more than 32 ETH (say, 96 ETH), the script will deposit 32, re-check the balance, deposit 32 again, etc., until < 32 remains.
-Customization
+
+## Customization
 Polling Interval: By default, it’s 60 seconds. Change the setTimeout(resolve, 60000) line to a different interval.
+
 Partial restakes: The script is coded to restake exactly 32 ETH at a time for single validators. If you want multiple validators in a single request or partial amounts, adjust the calls to the P2P endpoints accordingly.
+
 Advanced Flow: Some flows require calling createEigenPod(), delegateToOperator(), or checking validator status, etc. Add them in p2pApi.js or in the main script.
+
 Security: For production, do not store your private key in plain text. Instead, use environment variables or hardware wallets. Also consider a more advanced solution that doesn’t rely on a single EOA.
