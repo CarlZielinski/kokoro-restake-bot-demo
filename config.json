@@ -1,0 +1,10 @@
+{
+    "rpc": "https://sepolia.infura.io/v3/<YOUR_INFURA_KEY>",
+    "privateKey": "0xabc123...yoursecret...", 
+    "p2pApiUrl": "https://api.p2p.org/v1/",
+    "authToken": "Bearer <someAuthToken>",
+    "stakerAddress": "0xYourRestakeEOA",
+    "feeRecipientAddress": "0xYourRestakeEOA",
+    "controllerAddress": "0xYourRestakeEOA"
+  }
+  
